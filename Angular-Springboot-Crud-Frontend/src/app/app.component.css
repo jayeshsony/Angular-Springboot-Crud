@@ -1,0 +1,25 @@
+* {
+    margin: 0%;
+    padding: 0%;
+  }
+  
+  .nav-bar {
+    padding: 10px 10px 10px 10px;
+    height: 60px;
+    background-color: #f3e5f5;
+  }
+  
+  li a {
+    color: #6a1b8a;
+    font-size: larger;
+    font-weight: 600;
+    display: inline-block;
+    padding: 5px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+  }
+  
+  li a:hover {
+    background-color: #b08bb6;
+    transition: 0.3s ease-in-out;
+  }
