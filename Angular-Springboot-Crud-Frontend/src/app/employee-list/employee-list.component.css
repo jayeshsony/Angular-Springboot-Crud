@@ -4,6 +4,10 @@
   list-style: none;
 }
 
+.headerLink {
+  text-decoration: none;
+}
+
 .table-container {
   width: 80%;
   margin: 50px auto;

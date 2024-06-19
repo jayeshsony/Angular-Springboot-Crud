@@ -36,48 +36,45 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class EmployeeServiceImpl implements EmployeeService {
 
-	EmployeeRepository empRepo;
+	EmployeeRepository employeeRepository;
 
 	ModelMapper modelMapper;
 
 	@Override
 	public ResponseEntity<?> createOrUpdateEmployee(EmployeeDto employeeDTO) {
 		Long employeeId = employeeDTO.getId();
-		if (employeeId != null && empRepo.existsById(employeeId)) {
-			if (empRepo.existsByEmailAndIdNot(employeeDTO.getEmail(), employeeId)
-					&& empRepo.existsByMobileNumberAndIdNot(employeeDTO.getMobileNumber(), employeeId)) {
+		if (employeeId != null && employeeRepository.existsById(employeeId)) {
+			if (employeeRepository.existsByEmailAndIdNot(employeeDTO.getEmail(), employeeId)
+					&& employeeRepository.existsByMobileNumberAndIdNot(employeeDTO.getMobileNumber(), employeeId)) {
 				return ResponseEntity.ok("bothExist");
-			} else if (empRepo.existsByEmailAndIdNot(employeeDTO.getEmail(), employeeId)) {
+			} else if (employeeRepository.existsByEmailAndIdNot(employeeDTO.getEmail(), employeeId)) {
 				return ResponseEntity.ok("emailExists");
-			} else if (empRepo.existsByMobileNumberAndIdNot(employeeDTO.getMobileNumber(), employeeId)) {
+			} else if (employeeRepository.existsByMobileNumberAndIdNot(employeeDTO.getMobileNumber(), employeeId)) {
 				return ResponseEntity.ok("mobileExists");
 			}
 		} else {
-			if (empRepo.existsByEmail(employeeDTO.getEmail())
-					&& empRepo.existsByMobileNumber(employeeDTO.getMobileNumber())) {
+			if (employeeRepository.existsByEmail(employeeDTO.getEmail())
+					&& employeeRepository.existsByMobileNumber(employeeDTO.getMobileNumber())) {
 				return ResponseEntity.ok("bothExist");
-			} else if (empRepo.existsByEmail(employeeDTO.getEmail())) {
+			} else if (employeeRepository.existsByEmail(employeeDTO.getEmail())) {
 				return ResponseEntity.ok("emailExists");
-			} else if (empRepo.existsByMobileNumber(employeeDTO.getMobileNumber())) {
+			} else if (employeeRepository.existsByMobileNumber(employeeDTO.getMobileNumber())) {
 				return ResponseEntity.ok("mobileExists");
 			}
 		}
-
-		Employee employee = modelMapper.map(employeeDTO, Employee.class);
-		Employee savedEmployee = empRepo.save(employee);
-		return ResponseEntity.ok(modelMapper.map(savedEmployee, EmployeeDto.class));
+		return ResponseEntity.ok(modelMapper.map(employeeRepository.save(modelMapper.map(employeeDTO, Employee.class)), EmployeeDto.class));
 	}
 
 	@Override
 	public List<Employee> retriveAllEmployees() {
-		return empRepo.findAll(Sort.by(Direction.DESC, "id"));
+		return employeeRepository.findAll(Sort.by(Direction.DESC, "id"));
 	}
 
 	@Override
 	public void deleteEmployee(Long id) {
 		// Check if the id is present in database or not
-		if (empRepo.existsById(id)) {
-			empRepo.deleteById(id);
+		if (employeeRepository.existsById(id)) {
+			employeeRepository.deleteById(id);
 		} else {
 			// if id is not present throw error
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, ConstantMessages.USER_NOT_FOUND);
@@ -87,8 +84,8 @@ public class EmployeeServiceImpl implements EmployeeService {
 	@Override
 	public Employee getEmployeeById(Long id) {
 		// Check if the id is present in database or not
-		if (empRepo.existsById(id)) {
-			Optional<Employee> currentEmployee = empRepo.findById(id);
+		if (employeeRepository.existsById(id)) {
+			Optional<Employee> currentEmployee = employeeRepository.findById(id);
 			if (currentEmployee.isPresent()) {
 				return currentEmployee.get();
 			} else {

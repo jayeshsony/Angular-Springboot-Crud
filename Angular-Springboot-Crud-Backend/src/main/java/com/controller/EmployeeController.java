@@ -42,7 +42,7 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class EmployeeController {
 
-	EmployeeService empService;
+	EmployeeService employeeService;
 
 	/**
 	 * Handle POST requests to create a new employee record.
@@ -52,7 +52,7 @@ public class EmployeeController {
 	 */
 	@PostMapping("/create")
 	public ResponseEntity<?> handleForm(@RequestBody @Valid EmployeeDto employeeDTO) {
-		return empService.createOrUpdateEmployee(employeeDTO);
+		return employeeService.createOrUpdateEmployee(employeeDTO);
 	}
 
 	/**
@@ -62,7 +62,7 @@ public class EmployeeController {
 	 */
 	@GetMapping("/retrive")
 	public List<Employee> retriveEmployees() {
-		return empService.retriveAllEmployees();
+		return employeeService.retriveAllEmployees();
 	}
 
 	/**
@@ -72,7 +72,7 @@ public class EmployeeController {
 	 */
 	@DeleteMapping("/delete/{id}")
 	public void deleteEmployee(@PathVariable Long id) {
-		empService.deleteEmployee(id);
+		employeeService.deleteEmployee(id);
 	}
 
 	/**
@@ -83,8 +83,7 @@ public class EmployeeController {
 	 */
 	@GetMapping("/emp/{id}")
 	public ResponseEntity<Employee> getEmployeeById(@PathVariable Long id) {
-		Employee employee = empService.getEmployeeById(id);
-		return ResponseEntity.ok(employee);
+		return ResponseEntity.ok(employeeService.getEmployeeById(id));
 	}
 
 	/**
@@ -95,7 +94,7 @@ public class EmployeeController {
 	 */
 	@PutMapping("/update")
 	public ResponseEntity<?> updateEmployee(@Valid @RequestBody EmployeeDto employeeDTO) {
-		return empService.createOrUpdateEmployee(employeeDTO);
+		return employeeService.createOrUpdateEmployee(employeeDTO);
 	}
 
 	/**

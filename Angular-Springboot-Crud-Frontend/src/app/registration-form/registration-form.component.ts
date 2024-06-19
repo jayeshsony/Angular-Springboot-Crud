@@ -13,6 +13,7 @@ import { numberLengthValidator } from '../validator';
   styleUrls: ['./registration-form.component.css']
 })
 export class RegistrationFormComponent {
+
   public registrationForm !: FormGroup;
 
   // Object to hold employee data
