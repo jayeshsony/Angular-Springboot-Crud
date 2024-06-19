@@ -6,6 +6,16 @@ body {
   background: linear-gradient(to bottom, #d1c4e9, #f3e5f5);
 }
 
+.header {
+  display: flex;
+  justify-content: space-around;
+  list-style: none;
+}
+
+.headerLink {
+  text-decoration: none;
+}
+
 .container {
   width: 80%;
   margin: 0 auto;

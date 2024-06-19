@@ -115,7 +115,6 @@ public class EmployeeController {
 			String message = error.getDefaultMessage();
 			errorsMap.putIfAbsent(field, message);
 		});
-
 		return new ResponseEntity<>(errorsMap, HttpStatus.BAD_REQUEST);
 	}
 

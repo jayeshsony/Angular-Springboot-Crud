@@ -34,8 +34,4 @@ public class ConstantMessages {
 
 	public static final String USER_NOT_FOUND = "User not found";
 
-	private ConstantMessages() {
-		throw new IllegalStateException("ConstantMessages class should not be instantiated.");
-	}
-
 }

@@ -37,18 +37,19 @@ import lombok.experimental.FieldDefaults;
 public class EmployeeServiceImpl implements EmployeeService {
 
 	EmployeeRepository empRepo;
+
 	ModelMapper modelMapper;
 
 	@Override
 	public ResponseEntity<?> createOrUpdateEmployee(EmployeeDto employeeDTO) {
-		Long id = employeeDTO.getId();
-		if (id != null && empRepo.existsById(id)) {
-			if (empRepo.existsByEmailAndIdNot(employeeDTO.getEmail(), id)
-					&& empRepo.existsByMobileNumberAndIdNot(employeeDTO.getMobileNumber(), id)) {
+		Long employeeId = employeeDTO.getId();
+		if (employeeId != null && empRepo.existsById(employeeId)) {
+			if (empRepo.existsByEmailAndIdNot(employeeDTO.getEmail(), employeeId)
+					&& empRepo.existsByMobileNumberAndIdNot(employeeDTO.getMobileNumber(), employeeId)) {
 				return ResponseEntity.ok("bothExist");
-			} else if (empRepo.existsByEmailAndIdNot(employeeDTO.getEmail(), id)) {
+			} else if (empRepo.existsByEmailAndIdNot(employeeDTO.getEmail(), employeeId)) {
 				return ResponseEntity.ok("emailExists");
-			} else if (empRepo.existsByMobileNumberAndIdNot(employeeDTO.getMobileNumber(), id)) {
+			} else if (empRepo.existsByMobileNumberAndIdNot(employeeDTO.getMobileNumber(), employeeId)) {
 				return ResponseEntity.ok("mobileExists");
 			}
 		} else {
@@ -69,8 +70,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 	@Override
 	public List<Employee> retriveAllEmployees() {
-		List<Employee> allEmployees = empRepo.findAll(Sort.by(Direction.DESC, "id"));
-		return allEmployees;
+		return empRepo.findAll(Sort.by(Direction.DESC, "id"));
 	}
 
 	@Override
@@ -88,9 +88,9 @@ public class EmployeeServiceImpl implements EmployeeService {
 	public Employee getEmployeeById(Long id) {
 		// Check if the id is present in database or not
 		if (empRepo.existsById(id)) {
-			Optional<Employee> foundEmployee = empRepo.findById(id);
-			if (foundEmployee.isPresent()) {
-				return foundEmployee.get();
+			Optional<Employee> currentEmployee = empRepo.findById(id);
+			if (currentEmployee.isPresent()) {
+				return currentEmployee.get();
 			} else {
 				throw new ResponseStatusException(HttpStatus.NOT_FOUND, ConstantMessages.USER_NOT_FOUND);
 			}
