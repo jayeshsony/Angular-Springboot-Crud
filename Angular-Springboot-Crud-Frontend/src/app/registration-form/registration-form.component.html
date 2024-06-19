@@ -1,0 +1,182 @@
+<div class="container-fluid">
+  <div class="nav-bar">
+    <div class="row">
+      <div class="col-3">
+        <ul class="header">
+          <li>
+            <a class="headerLink" routerLink="../retrive" routerLinkActive="active">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-list-task"
+                viewBox="0 0 16 16">
+                <path fill-rule="evenodd"
+                  d="M2 2.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5V3a.5.5 0 0 0-.5-.5zM3 3H2v1h1z" />
+                <path
+                  d="M5 3.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5M5.5 7a.5.5 0 0 0 0 1h9a.5.5 0 0 0 0-1zm0 4a.5.5 0 0 0 0 1h9a.5.5 0 0 0 0-1z" />
+                <path fill-rule="evenodd"
+                  d="M1.5 7a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5H2a.5.5 0 0 1-.5-.5zM2 7h1v1H2zm0 3.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5zm1 .5H2v1h1z" />
+              </svg>
+              Employee List
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="container">
+  <form #employeeForm="ngForm" [formGroup]="registrationForm" (ngSubmit)="onSubmit()">
+    <div class="form-row row">
+      <!-- First Name -->
+      <div class="col-md-6">
+        <label for="firstName">*First Name:</label>
+        <input type="text" id="firstName" formControlName="firstName">
+        <div class="text-danger" *ngIf="fieldErrors.firstName">First Name is required.</div>
+        <div
+          *ngIf="registrationForm.get('firstName')?.invalid && (registrationForm.get('firstName')?.dirty || registrationForm.get('firstName')?.touched)">
+          <span class="text-danger" *ngIf="registrationForm.get('firstName')?.errors?.['required']">First Name is
+            required.</span>
+          <span class="text-danger" *ngIf="registrationForm.get('firstName')?.errors?.['minlength']">First Name must be
+            at
+            least 2 characters long.</span>
+          <span class="text-danger" *ngIf="registrationForm.get('firstName')?.errors?.['maxlength']">First Name cannot
+            be
+            more than 50 characters long.</span>
+        </div>
+      </div>
+      <!-- Last Name -->
+      <div class="col-md-6">
+        <label for="lastName">*Last Name:</label>
+        <input type="text" id="lastName" formControlName="lastName">
+        <div class="text-danger" *ngIf="fieldErrors.lastName">{{fieldErrors.lastName}}</div>
+        <div
+          *ngIf="registrationForm.get('lastName')?.invalid && (registrationForm.get('lastName')?.dirty || registrationForm.get('lastName')?.touched)">
+          <span class="text-danger" *ngIf="registrationForm.get('lastName')?.errors?.['required']">Last Name is
+            required.</span>
+          <span class="text-danger" *ngIf="registrationForm.get('lastName')?.errors?.['minlength']">Last Name must be at
+            least 2 characters long.</span>
+          <span class="text-danger" *ngIf="registrationForm.get('lastName')?.errors?.['maxlength']">Last Name cannot be
+            more
+            than 50 characters long.</span>
+        </div>
+      </div>
+    </div>
+    <!-- Email -->
+    <div class="form-row row">
+      <div class="col-12">
+        <label for="email">*Email:</label>
+        <input type="email" id="email" formControlName="email" #email>
+        <div class="text-danger" *ngIf="fieldErrors.email">{{fieldErrors.email}}</div>
+        <span class="text-danger">{{emailErrorMessage}}</span>
+        <span class="text-danger"
+          *ngIf="registrationForm.get('email')?.invalid && (registrationForm.get('email')?.dirty || registrationForm.get('email')?.touched)">
+          <span *ngIf="registrationForm.get('email')?.errors?.['required']">Email is required.</span>
+          <span *ngIf="registrationForm.get('email')?.errors?.['email']">Invalid email format.</span>
+        </span>
+      </div>
+    </div>
+    <!-- Birth Date and Age -->
+    <div class="form-row row">
+      <div class="col-md-6">
+        <label for="dob">*Birth-Date:</label>
+        <input type="date" id="dob" formControlName="dob" (input)="checkDate()" #dob>
+        <div class="text-danger" *ngIf="fieldErrors.dob">{{fieldErrors.dob}}</div>
+        <div
+          *ngIf="registrationForm.get('dob')?.invalid && (registrationForm.get('dob')?.dirty || registrationForm.get('dob')?.touched)">
+          <span class="text-danger" *ngIf="registrationForm.get('dob')?.errors?.['required']">Birth Date is
+            required. </span>
+        </div>
+        <span class="text-danger" *ngIf="isFutureDate==true">Please select a date that is not in the future.</span>
+      </div>
+      <div class="col-md-6">
+        <label for="age">*Age:</label>
+        <input type="number" id="age" formControlName="age">
+        <div class="text-danger" *ngIf="fieldErrors.age">{{fieldErrors.age}}</div>
+        <div
+          *ngIf="registrationForm.get('age')?.invalid && (registrationForm.get('age')?.dirty || registrationForm.get('age')?.touched)">
+          <span class="text-danger" *ngIf="registrationForm.get('age')?.errors?.['required']">Age is required.</span>
+        </div>
+      </div>
+    </div>
+    <!-- Mobile Number -->
+    <div class="form-row row">
+      <div class="col-md-6">
+        <label for="mobile">*Mobile:</label>
+        <input type="number" id="mobile" formControlName="mobileNumber" appNumberValidation>
+        <div class="text-danger" *ngIf="fieldErrors.mobileNumber">{{fieldErrors.mobileNumber}}</div>
+        <span class="text-danger">{{mobileErrorMessage}}</span>
+        <div
+          *ngIf="registrationForm.get('mobileNumber')?.invalid && (registrationForm.get('mobileNumber')?.dirty || registrationForm.get('mobilenumber')?.touched)">
+          <span class="text-danger" *ngIf="registrationForm.get('mobileNumber')?.errors?.['numberLength']">Mobile
+            Number must be 10 digits.</span>
+        </div>
+        <span class="text-danger"
+          *ngIf="registrationForm.get('mobileNumber')?.touched && registrationForm.get('mobileNumber')?.errors?.['required']">Mobile
+          number is
+          required.</span>
+      </div>
+      <!-- Gender -->
+      <div class="col-md-6">
+        <div class="row">
+          <div class="col-md-2 mt-4">
+            <label>*Gender:</label>
+          </div>
+          <div class="col-md-8">
+            <div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input mt-4" type="radio" name="gender" id="male" value="Male"
+                  formControlName="gender" />
+                <label class="form-check-label mt-4" for="male">Male</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input mt-4" type="radio" name="gender" id="female" value="Female"
+                  formControlName="gender" />
+                <label class="form-check-label mt-4" for="female">Female</label>
+              </div>
+            </div>
+            <div
+              *ngIf="registrationForm.get('gender')?.invalid && (registrationForm.get('gender')?.dirty || registrationForm.get('gender')?.touched)">
+              <span class="text-danger">Gender is required.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Address -->
+    <div class="form-row row">
+      <div class="col-12">
+        <label for="address1">*Address 1:</label>
+        <input type="text" id="address1" formControlName="address1">
+        <div class="text-danger" *ngIf="fieldErrors.address1">{{fieldErrors.address2}}</div>
+        <div
+          *ngIf="registrationForm.get('address1')?.invalid && (registrationForm.get('address1')?.dirty || registrationForm.get('address1')?.touched)">
+          <span class="text-danger" *ngIf="registrationForm.get('address1')?.errors?.['required']">Address is
+            required.</span>
+          <span class="text-danger" *ngIf="registrationForm.get('address1')?.errors?.['minlength']">Address must be at
+            least 2 characters long.</span>
+          <span class="text-danger" *ngIf="registrationForm.get('address1')?.errors?.['maxlength']">Address cannot be
+            more
+            than 255 characters long.</span>
+        </div>
+      </div>
+      <div class="col-12">
+        <label for="address2">Address 2:</label>
+        <input type="text" id="address2" formControlName="address2">
+        <span class="text-danger" *ngIf="registrationForm.get('address2')?.errors?.['minlength']">Address must be at
+          least 2 characters long.</span>
+        <span class="text-danger" *ngIf="registrationForm.get('address2')?.errors?.['maxlength']">Address cannot be more
+          than 255 characters long.</span>
+      </div>
+    </div>
+    <!-- Submit Button -->
+    <div class="form-row row">
+      <div class="col-md-6">
+        <button type="submit" *ngIf="!showUpdateButton"
+          [disabled]="!registrationForm.valid || emailErrorMessage !=='' || mobileErrorMessage!==''">Submit</button>
+        <button *ngIf="showUpdateButton" type="submit"
+          [disabled]="!registrationForm.valid || !isFormChanged || isFutureDate || emailErrorMessage !=='' || mobileErrorMessage!=='' || !registrationForm.dirty">Update</button>
+      </div>
+      <div class="col-md-6">
+        <button type="button" (click)="cancleAction()">Cancel</button>
+      </div>
+    </div>
+  </form>
+</div>
